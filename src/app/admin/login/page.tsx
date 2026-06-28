@@ -15,7 +15,7 @@ export default async function AdminLoginPage({
         <h1 className="font-serif text-2xl">Admin Login</h1>
         <p className="mt-2 text-sm text-muted">Makkah Arts dashboard</p>
 
-        <form action={loginAdmin} className="mt-8 space-y-2">
+        <form action={loginAdmin} className="mt-8 space-y-4">
           <div>
             <label htmlFor="email" className="text-xs tracking-widest text-muted uppercase">
               Email
