@@ -43,7 +43,7 @@ export async function createProduct(formData: FormData): Promise<void> {
   const supabase = await createClient();
   const parsed = productSchema.parse({
     title: formData.get("title"),
-    slug: formData.get("slug") || null,
+    slug: formData.get("slug") || undefined,
     price: formData.get("price"),
     description: formData.get("description") || undefined,
     category_id: formData.get("category_id") || undefined,
