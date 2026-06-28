@@ -1,0 +1,120 @@
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { ProductGallery } from "@/components/product/ProductGallery";
+import { AvailabilityBadge } from "@/components/product/AvailabilityBadge";
+import { AddToCartButton } from "@/components/product/AddToCartButton";
+import { WhatsAppOrderButton } from "@/components/product/WhatsAppOrderButton";
+import { RelatedProducts } from "@/components/product/RelatedProducts";
+import { ProductJsonLd } from "@/components/seo/ProductJsonLd";
+import {
+  getProductBySlug,
+  getRelatedProducts,
+} from "@/lib/data/products";
+import { formatPKR } from "@/lib/utils/format";
+
+interface ProductPageProps {
+  params: Promise<{ slug: string }>;
+}
+
+export async function generateMetadata({
+  params,
+}: ProductPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const product = await getProductBySlug(slug);
+  if (!product) return { title: "Product Not Found" };
+
+  const image = product.product_images.sort(
+    (a, b) => a.sort_order - b.sort_order,
+  )[0]?.url;
+
+  return {
+    title: product.title,
+    description: product.description?.slice(0, 160),
+    alternates: { canonical: `/product/${product.slug}` },
+    openGraph: {
+      title: product.title,
+      description: product.description ?? undefined,
+      images: image ? [{ url: image }] : [],
+    },
+  };
+}
+
+export default async function ProductPage({ params }: ProductPageProps) {
+  const { slug } = await params;
+  const product = await getProductBySlug(slug);
+  if (!product) notFound();
+
+  const related = await getRelatedProducts(product.category_id, product.id);
+
+  return (
+    <>
+      <ProductJsonLd product={product} />
+      <div className="container-main py-10 md:py-16">
+        <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
+          <ProductGallery
+            images={product.product_images}
+            title={product.title}
+          />
+
+          <div>
+            {product.categories && (
+              <p className="text-xs tracking-widest text-muted uppercase">
+                {product.categories.name}
+              </p>
+            )}
+            <h1 className="mt-2 font-serif text-3xl md:text-4xl lg:text-5xl">
+              {product.title}
+            </h1>
+            <p className="mt-4 text-2xl font-medium">{formatPKR(product.price)}</p>
+
+            <div className="mt-4">
+              <AvailabilityBadge
+                status={product.availability_status}
+                stockQuantity={product.stock_quantity}
+              />
+            </div>
+
+            {product.description && (
+              <p className="mt-6 text-sm leading-relaxed text-muted">
+                {product.description}
+              </p>
+            )}
+
+            <dl className="mt-8 space-y-3 border-t border-border pt-8 text-sm">
+              {product.fabric && (
+                <div className="flex gap-4">
+                  <dt className="w-28 text-muted">Fabric</dt>
+                  <dd>{product.fabric}</dd>
+                </div>
+              )}
+              {product.color && (
+                <div className="flex gap-4">
+                  <dt className="w-28 text-muted">Color</dt>
+                  <dd>{product.color}</dd>
+                </div>
+              )}
+              <div className="flex gap-4">
+                <dt className="w-28 text-muted">Delivery</dt>
+                <dd>{product.delivery_estimate ?? "3-5 business days"}</dd>
+              </div>
+            </dl>
+
+            <div className="mt-8 space-y-3">
+              <AddToCartButton product={product} />
+              <WhatsAppOrderButton product={product} />
+            </div>
+
+            {product.availability_status === "pre_order" && (
+              <p className="mt-4 text-xs text-muted">
+                This item is available for pre-order. Expected dispatch within
+                the stated delivery estimate.
+              </p>
+            )}
+          </div>
+        </div>
+
+        <RelatedProducts products={related} />
+      </div>
+    </>
+  );
+}
