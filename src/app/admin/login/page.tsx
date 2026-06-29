@@ -17,7 +17,7 @@ export default async function AdminLoginPage({
 
         <form action={loginAdmin} className="mt-8 space-y-4">
           <div>
-            <label htmlFor="email" className="text-xs tracking-widest text-muted uppercase">
+            <label htmlFor="email" className="text-xs tracking-wide text-muted uppercase">
               Email
             </label>
             <input
