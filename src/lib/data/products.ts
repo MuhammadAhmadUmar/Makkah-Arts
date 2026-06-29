@@ -1,5 +1,6 @@
 import { isSupabaseConfigured } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
+import { slugify } from "@/lib/utils/slug";
 import type {
   Category,
   OrderWithItems,
@@ -99,13 +100,34 @@ export async function getProductBySlug(
   slug: string,
 ): Promise<ProductWithRelations | null> {
   if (!isSupabaseConfigured()) return null;
+
+  const normalizedSlug = slug.trim().toLowerCase();
   const supabase = await createClient();
+
   const { data } = await supabase
     .from("products")
     .select(PRODUCT_SELECT)
-    .eq("slug", slug)
-    .single();
-  return data as ProductWithRelations | null;
+    .eq("slug", normalizedSlug)
+    .maybeSingle();
+
+  if (data) {
+    return data as ProductWithRelations | null;
+  }
+
+  const fallbackSlug = slugify(normalizedSlug);
+  if (fallbackSlug && fallbackSlug !== normalizedSlug) {
+    const { data: fallbackData } = await supabase
+      .from("products")
+      .select(PRODUCT_SELECT)
+      .eq("slug", fallbackSlug)
+      .maybeSingle();
+
+    if (fallbackData) {
+      return fallbackData as ProductWithRelations | null;
+    }
+  }
+
+  return null;
 }
 
 export async function getRelatedProducts(

@@ -80,6 +80,23 @@ export default async function ProductPage({ params }: ProductPageProps) {
               </p>
             )}
 
+            <div className="mt-8 rounded-2xl border border-border bg-stone-50 p-6">
+              <div className="grid gap-4 sm:grid-cols-3">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.3em] text-muted">Craftsmanship</p>
+                  <p className="mt-2 text-sm text-foreground">Premium tailored finishing with couture-level detailing.</p>
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-[0.3em] text-muted">Shipping</p>
+                  <p className="mt-2 text-sm text-foreground">Fast nationwide delivery with secure packaging.</p>
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-[0.3em] text-muted">Support</p>
+                  <p className="mt-2 text-sm text-foreground">Dedicated WhatsApp support for styling and order help.</p>
+                </div>
+              </div>
+            </div>
+
             <dl className="mt-8 space-y-3 border-t border-border pt-8 text-sm">
               {product.fabric && (
                 <div className="flex gap-4">

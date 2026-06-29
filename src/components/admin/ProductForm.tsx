@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { useRouter } from "next/navigation";
 import type { Category, ProductWithRelations } from "@/types/database";
 import { createProduct, updateProduct } from "@/app/admin/actions";
 
@@ -10,13 +10,21 @@ interface ProductFormProps {
 }
 
 export function ProductForm({ categories, product }: ProductFormProps) {
+  const router = useRouter();
   const isEdit = Boolean(product);
 
   async function handleSubmit(formData: FormData) {
     if (isEdit && product) {
       await updateProduct(product.id, formData);
+      router.push("/admin/products");
+      return;
+    }
+
+    const result = await createProduct(formData);
+    if (result.id) {
+      router.push(`/admin/products/${result.id}/edit`);
     } else {
-      await createProduct(formData);
+      router.push("/admin/products/new?error=" + encodeURIComponent(result.error ?? "Unable to create product"));
     }
   }
 

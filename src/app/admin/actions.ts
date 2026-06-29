@@ -39,7 +39,7 @@ export async function logoutAdmin() {
   redirect("/admin/login");
 }
 
-export async function createProduct(formData: FormData): Promise<void> {
+export async function createProduct(formData: FormData): Promise<{ id?: string; error?: string }> {
   const supabase = await createClient();
   const parsed = productSchema.parse({
     title: formData.get("title"),
@@ -57,20 +57,24 @@ export async function createProduct(formData: FormData): Promise<void> {
 
   const slug = parsed.slug || slugify(parsed.title);
 
-  const { error } = await supabase.from("products").insert({
-    ...parsed,
-    slug,
-    category_id: parsed.category_id || null,
-    featured: parsed.featured ?? false,
-  });
+  const { data, error } = await supabase
+    .from("products")
+    .insert({
+      ...parsed,
+      slug,
+      category_id: parsed.category_id || null,
+      featured: parsed.featured ?? false,
+    })
+    .select("id")
+    .single();
 
   if (error) {
-    redirect(`/admin/products/new?error=${encodeURIComponent(error.message)}`);
+    return { error: error.message };
   }
 
   revalidatePath("/shop");
   revalidatePath("/admin/products");
-  redirect("/admin/products");
+  return { id: data.id };
 }
 
 export async function updateProduct(id: string, formData: FormData): Promise<void> {
@@ -159,14 +163,17 @@ export async function addProductImage(
   productId: string,
   url: string,
   altText?: string,
+  sortOrder = 0,
 ) {
   const supabase = await createClient();
   const { error } = await supabase.from("product_images").insert({
     product_id: productId,
     url,
     alt_text: altText ?? null,
+    sort_order: sortOrder,
   });
 
   if (error) return { error: error.message };
   revalidatePath("/admin/products");
+  revalidatePath(`/admin/products/${productId}/edit`);
 }
