@@ -61,3 +61,35 @@ img {
     @apply rounded-[2rem] border border-border bg-white/80 shadow-[0_20px_60px_rgba(26,26,26,0.04)];
   }
 }
+
+@keyframes shaky-button {
+  0%, 60%, 100% {
+    transform: translateX(0) rotate(0deg);
+  }
+  62% {
+    transform: translateX(4px) rotate(1deg);
+  }
+  64% {
+    transform: translateX(-4px) rotate(-1deg);
+  }
+  66% {
+    transform: translateX(4px) rotate(1deg);
+  }
+  68% {
+    transform: translateX(-4px) rotate(-1deg);
+  }
+  70% {
+    transform: translateX(3px) rotate(0.6deg);
+  }
+  72% {
+    transform: translateX(-3px) rotate(-0.6deg);
+  }
+  74% {
+    transform: translateX(0) rotate(0deg);
+  }
+}
+
+.shaky-button {
+  animation: shaky-button 3.5s ease-in-out infinite;
+  will-change: transform;
+}

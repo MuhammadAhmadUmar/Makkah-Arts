@@ -19,7 +19,7 @@ export function Hero() {
             Premium Pakistani Fashion
           </p>
           <h1 className="mt-4 max-w-2xl text-5xl leading-[0.95] sm:text-6xl lg:text-7xl">
-            Timeless 3-Piece Lawn Suits
+            Graceful 3-Piece Lawn Suits
           </h1>
           <p className="mt-6 max-w-lg text-base leading-relaxed text-white/85">
             Discover curated lawn collections from Makkah Arts — authentic fabrics,
@@ -28,9 +28,10 @@ export function Hero() {
           <div className="mt-8 flex flex-wrap gap-4">
             <Link
               href="/shop"
-              className="rounded-full bg-white px-8 py-3 text-[11px] font-medium tracking-[0.3em] text-foreground uppercase transition hover:bg-accent hover:text-white"
+              className="relative inline-flex items-center justify-center overflow-hidden rounded-full bg-gradient-to-r from-white via-slate-100 to-slate-200 px-8 py-3 text-[11px] font-medium tracking-[0.3em] text-foreground uppercase shadow-[0_16px_45px_rgba(255,255,255,0.18)] transition duration-300 hover:text-white shaky-button"
             >
-              Shop Collection
+              <span className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.5),transparent_40%)] opacity-70" />
+              <span className="relative">Shop Collection</span>
             </Link>
             <Link
               href="/shop?availability=in_stock"
