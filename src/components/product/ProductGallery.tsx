@@ -57,7 +57,7 @@ export function ProductGallery({ images, title }: ProductGalleryProps) {
 
   return (
     <div>
-      <div className="relative aspect-[3/4] overflow-hidden bg-stone-100">
+      <div className="relative aspect-[3/4] overflow-hidden rounded-[2rem] border border-border bg-stone-100 shadow-[0_18px_50px_rgba(26,26,26,0.06)]">
         <button
           type="button"
           onClick={() => setIsZoomOpen(true)}
@@ -103,7 +103,7 @@ export function ProductGallery({ images, title }: ProductGalleryProps) {
         )}
       </div>
 
-      <p className="mt-3 text-xs uppercase tracking-[0.3em] text-muted">
+      <p className="mt-3 text-[11px] uppercase tracking-[0.35em] text-muted">
         Click image to zoom
       </p>
 
@@ -114,7 +114,7 @@ export function ProductGallery({ images, title }: ProductGalleryProps) {
               key={img.id}
               type="button"
               onClick={() => setActiveIndex(index)}
-              className={`relative aspect-square overflow-hidden border-2 ${
+              className={`relative aspect-square overflow-hidden rounded-xl border-2 ${
                 index === activeIndex ? "border-accent" : "border-transparent"
               }`}
             >

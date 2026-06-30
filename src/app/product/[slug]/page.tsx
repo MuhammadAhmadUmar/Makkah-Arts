@@ -50,83 +50,99 @@ export default async function ProductPage({ params }: ProductPageProps) {
     <>
       <ProductJsonLd product={product} />
       <div className="container-main py-10 md:py-16">
-        <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
+        <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
           <ProductGallery
             images={product.product_images}
             title={product.title}
           />
 
-          <div>
-            {product.categories && (
-              <p className="text-xs tracking-widest text-muted uppercase">
-                {product.categories.name}
-              </p>
-            )}
-            <h1 className="mt-2 font-serif text-3xl md:text-4xl lg:text-5xl">
-              {product.title}
-            </h1>
-            <p className="mt-4 text-2xl font-medium">{formatPKR(product.price)}</p>
+          <div className="lg:sticky lg:top-24 lg:self-start">
+            <div className="rounded-[2rem] border border-border bg-white/90 p-6 shadow-[0_24px_80px_rgba(26,26,26,0.06)] sm:p-8">
+              {product.categories && (
+                <p className="text-[11px] uppercase tracking-[0.35em] text-muted">
+                  {product.categories.name}
+                </p>
+              )}
+              <h1 className="mt-3 font-serif text-3xl md:text-4xl lg:text-5xl">
+                {product.title}
+              </h1>
 
-            <div className="mt-4">
-              <AvailabilityBadge
-                status={product.availability_status}
-                stockQuantity={product.stock_quantity}
-              />
-            </div>
+              <div className="mt-5 flex flex-wrap items-center gap-3">
+                <p className="text-2xl font-semibold text-foreground">
+                  {formatPKR(product.price)}
+                </p>
+                <AvailabilityBadge
+                  status={product.availability_status}
+                  stockQuantity={product.stock_quantity}
+                />
+              </div>
 
-            {product.description && (
-              <p className="mt-6 text-sm leading-relaxed text-muted">
-                {product.description}
-              </p>
-            )}
+              {product.description && (
+                <p className="mt-6 text-sm leading-relaxed text-muted">
+                  {product.description}
+                </p>
+              )}
 
-            <div className="mt-8 rounded-2xl border border-border bg-stone-50 p-6">
-              <div className="grid gap-4 sm:grid-cols-3">
-                <div>
-                  <p className="text-xs uppercase tracking-[0.3em] text-muted">Craftsmanship</p>
-                  <p className="mt-2 text-sm text-foreground">Premium tailored finishing with couture-level detailing.</p>
-                </div>
-                <div>
-                  <p className="text-xs uppercase tracking-[0.3em] text-muted">Shipping</p>
-                  <p className="mt-2 text-sm text-foreground">Fast nationwide delivery with secure packaging.</p>
-                </div>
-                <div>
-                  <p className="text-xs uppercase tracking-[0.3em] text-muted">Support</p>
-                  <p className="mt-2 text-sm text-foreground">Dedicated WhatsApp support for styling and order help.</p>
+              <div className="mt-8 rounded-[1.5rem] border border-border bg-stone-50 p-5">
+                <div className="grid gap-4 sm:grid-cols-3">
+                  <div>
+                    <p className="text-[10px] uppercase tracking-[0.3em] text-muted">
+                      Craftsmanship
+                    </p>
+                    <p className="mt-2 text-sm text-foreground">
+                      Premium finishing with couture-level detailing.
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-[10px] uppercase tracking-[0.3em] text-muted">
+                      Shipping
+                    </p>
+                    <p className="mt-2 text-sm text-foreground">
+                      Fast nationwide delivery with secure packaging.
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-[10px] uppercase tracking-[0.3em] text-muted">
+                      Support
+                    </p>
+                    <p className="mt-2 text-sm text-foreground">
+                      WhatsApp styling support for every order.
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <dl className="mt-8 space-y-3 border-t border-border pt-8 text-sm">
-              {product.fabric && (
+              <dl className="mt-8 space-y-3 border-t border-border pt-8 text-sm">
+                {product.fabric && (
+                  <div className="flex gap-4">
+                    <dt className="w-28 text-muted">Fabric</dt>
+                    <dd>{product.fabric}</dd>
+                  </div>
+                )}
+                {product.color && (
+                  <div className="flex gap-4">
+                    <dt className="w-28 text-muted">Color</dt>
+                    <dd>{product.color}</dd>
+                  </div>
+                )}
                 <div className="flex gap-4">
-                  <dt className="w-28 text-muted">Fabric</dt>
-                  <dd>{product.fabric}</dd>
+                  <dt className="w-28 text-muted">Delivery</dt>
+                  <dd>{product.delivery_estimate ?? "3-5 business days"}</dd>
                 </div>
-              )}
-              {product.color && (
-                <div className="flex gap-4">
-                  <dt className="w-28 text-muted">Color</dt>
-                  <dd>{product.color}</dd>
-                </div>
-              )}
-              <div className="flex gap-4">
-                <dt className="w-28 text-muted">Delivery</dt>
-                <dd>{product.delivery_estimate ?? "3-5 business days"}</dd>
+              </dl>
+
+              <div className="mt-8 space-y-3">
+                <AddToCartButton product={product} />
+                <WhatsAppOrderButton product={product} />
               </div>
-            </dl>
 
-            <div className="mt-8 space-y-3">
-              <AddToCartButton product={product} />
-              <WhatsAppOrderButton product={product} />
+              {product.availability_status === "pre_order" && (
+                <p className="mt-4 text-xs leading-relaxed text-muted">
+                  This item is available for pre-order. Expected dispatch within
+                  the stated delivery estimate.
+                </p>
+              )}
             </div>
-
-            {product.availability_status === "pre_order" && (
-              <p className="mt-4 text-xs text-muted">
-                This item is available for pre-order. Expected dispatch within
-                the stated delivery estimate.
-              </p>
-            )}
           </div>
         </div>
 
