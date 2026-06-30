@@ -72,9 +72,58 @@ export async function createProduct(formData: FormData): Promise<{ id?: string; 
     return { error: error.message };
   }
 
+  const images = formData.getAll("images").filter(
+    (value): value is File => value instanceof File && value.size > 0,
+  );
+
+  if (images.length > 0 && data?.id) {
+    try {
+      await uploadProductImages(data.id, images);
+    } catch (uploadError) {
+      return {
+        id: data.id,
+        error: uploadError instanceof Error ? uploadError.message : "Unable to upload images.",
+      };
+    }
+  }
+
   revalidatePath("/shop");
   revalidatePath("/admin/products");
   return { id: data.id };
+}
+
+async function uploadProductImages(productId: string, files: File[]) {
+  const supabase = await createClient();
+  const bucket = supabase.storage.from("product-images");
+
+  for (const [index, file] of files.entries()) {
+    const ext = file.name.split(".").pop() ?? "jpg";
+    const path = `${productId}/${Date.now()}-${index}.${ext}`;
+
+    const { error: uploadError } = await bucket.upload(path, file, {
+      cacheControl: "3600",
+      upsert: false,
+    });
+
+    if (uploadError) {
+      throw new Error(uploadError.message);
+    }
+
+    const {
+      data: { publicUrl },
+    } = bucket.getPublicUrl(path);
+
+    const { error: insertError } = await supabase.from("product_images").insert({
+      product_id: productId,
+      url: publicUrl,
+      alt_text: file.name,
+      sort_order: index,
+    });
+
+    if (insertError) {
+      throw new Error(insertError.message);
+    }
+  }
 }
 
 export async function updateProduct(id: string, formData: FormData): Promise<void> {
@@ -109,6 +158,22 @@ export async function updateProduct(id: string, formData: FormData): Promise<voi
     redirect(
       `/admin/products/${id}/edit?error=${encodeURIComponent(error.message)}`,
     );
+  }
+
+  const images = formData.getAll("images").filter(
+    (value): value is File => value instanceof File && value.size > 0,
+  );
+
+  if (images.length > 0) {
+    try {
+      await uploadProductImages(id, images);
+    } catch (uploadError) {
+      redirect(
+        `/admin/products/${id}/edit?error=${encodeURIComponent(
+          uploadError instanceof Error ? uploadError.message : "Unable to upload images.",
+        )}`,
+      );
+    }
   }
 
   revalidatePath("/shop");

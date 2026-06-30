@@ -22,7 +22,10 @@ export function ProductForm({ categories, product }: ProductFormProps) {
 
     const result = await createProduct(formData);
     if (result.id) {
-      router.push(`/admin/products/${result.id}/edit`);
+      const query = result.error
+        ? `?productId=${encodeURIComponent(result.id)}&error=${encodeURIComponent(result.error)}`
+        : `?productId=${encodeURIComponent(result.id)}`;
+      router.push(`/admin/products/new${query}`);
     } else {
       router.push("/admin/products/new?error=" + encodeURIComponent(result.error ?? "Unable to create product"));
     }
@@ -169,6 +172,23 @@ export function ProductForm({ categories, product }: ProductFormProps) {
           className="mt-2 w-full border border-border bg-white px-4 py-3 text-sm outline-none focus:border-accent"
         />
       </div>
+
+      {!isEdit && (
+        <div>
+          <label htmlFor="images" className="text-xs tracking-widest text-muted uppercase">
+            Product Images
+          </label>
+          <input
+            id="images"
+            name="images"
+            type="file"
+            accept="image/*"
+            multiple
+            className="mt-2 w-full text-sm"
+          />
+          <p className="mt-2 text-xs text-muted">Upload one or more images for the new product.</p>
+        </div>
+      )}
 
       <label className="flex items-center gap-2 text-sm">
         <input
