@@ -9,7 +9,7 @@ export function Hero() {
         alt="Premium lawn suit collection by Makkah Arts"
         fill
         priority
-        className="object-cover opacity-60"
+        className="object-cover object-center opacity-60"
         sizes="100vw"
       />
       <div className="absolute inset-0 bg-black/35" />

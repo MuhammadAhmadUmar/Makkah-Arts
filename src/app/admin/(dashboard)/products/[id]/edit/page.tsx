@@ -43,7 +43,7 @@ export default async function EditProductPage({ params }: EditProductPageProps) 
                       src={img.url}
                       alt={img.alt_text ?? product.title}
                       fill
-                      className="object-cover"
+                      className="object-contain object-center"
                       sizes="200px"
                     />
                   </div>

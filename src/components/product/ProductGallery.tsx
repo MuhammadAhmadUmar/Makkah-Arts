@@ -69,7 +69,7 @@ export function ProductGallery({ images, title }: ProductGalleryProps) {
             alt={active.alt_text ?? title}
             fill
             priority={activeIndex === 0}
-            className="object-cover transition duration-300 hover:scale-105"
+            className="object-contain object-center transition duration-300 hover:scale-105"
             sizes="(max-width: 1024px) 100vw, 50vw"
           />
         </button>
@@ -122,7 +122,7 @@ export function ProductGallery({ images, title }: ProductGalleryProps) {
                 src={img.url}
                 alt={img.alt_text ?? `${title} ${index + 1}`}
                 fill
-                className="object-cover"
+                className="object-cover object-center"
                 sizes="100px"
               />
             </button>
@@ -150,7 +150,7 @@ export function ProductGallery({ images, title }: ProductGalleryProps) {
                 src={active.url}
                 alt={active.alt_text ?? title}
                 fill
-                className="object-contain"
+                className="object-contain object-center"
                 sizes="(max-width: 768px) 100vw, 80vw"
               />
             </div>

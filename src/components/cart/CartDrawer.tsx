@@ -52,7 +52,7 @@ export function CartDrawer() {
                         src={item.imageUrl}
                         alt={item.title}
                         fill
-                        className="object-cover"
+                        className="object-contain object-center"
                         sizes="80px"
                       />
                     ) : (

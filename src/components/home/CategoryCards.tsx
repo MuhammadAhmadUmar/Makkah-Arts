@@ -34,7 +34,7 @@ export function CategoryCards({ categories }: CategoryCardsProps) {
                 src={category.image_url ?? fallbackImages[index % fallbackImages.length]}
                 alt={category.name}
                 fill
-                className="object-cover transition duration-500 group-hover:scale-105"
+                className="object-contain object-center transition duration-500 group-hover:scale-105"
                 sizes="(max-width: 768px) 100vw, 33vw"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />

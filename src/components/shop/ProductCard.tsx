@@ -34,7 +34,7 @@ export function ProductCard({ product }: ProductCardProps) {
             src={imageUrl}
             alt={product.title}
             fill
-            className="object-cover transition duration-500 group-hover:scale-105"
+            className="object-contain object-center transition duration-500 group-hover:scale-105"
             sizes="(max-width: 768px) 50vw, 25vw"
           />
         ) : (

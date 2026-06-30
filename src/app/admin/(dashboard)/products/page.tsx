@@ -37,7 +37,7 @@ export default async function AdminProductsPage() {
                       src={imageUrl}
                       alt={product.title}
                       fill
-                      className="object-cover"
+                      className="object-contain object-center"
                       sizes="56px"
                     />
                   ) : null}
