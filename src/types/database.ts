@@ -51,6 +51,7 @@ export interface ProductWithRelations extends Product {
 export interface Customer {
   id: string;
   name: string;
+  email: string | null;
   phone: string;
   city: string | null;
   created_at: string;
@@ -61,6 +62,7 @@ export interface Order {
   order_number: string;
   customer_id: string | null;
   customer_name: string;
+  customer_email: string | null;
   customer_phone: string;
   customer_address: string;
   customer_city: string;

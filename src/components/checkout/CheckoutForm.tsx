@@ -23,6 +23,8 @@ export function CheckoutForm() {
     whatsappUrl: string;
     total: number;
     paymentMethod: string;
+    emailSent: boolean;
+    emailError?: string;
   } | null>(null);
 
   const subtotal = getSubtotal();
@@ -49,6 +51,8 @@ export function CheckoutForm() {
           PAYMENT_METHOD_LABELS[
             paymentMethod as keyof typeof PAYMENT_METHOD_LABELS
           ],
+        emailSent: result.emailSent,
+        emailError: result.emailError,
       });
       trackEvent("purchase", {
         transaction_id: result.orderNumber,
@@ -118,6 +122,21 @@ export function CheckoutForm() {
         >
           Confirm on WhatsApp
         </a>
+        {!confirmation.emailSent && (
+          <div className="mt-4 rounded border border-orange-200 bg-orange-50 p-4 text-left text-sm text-orange-800">
+            <p className="font-medium">Email not delivered</p>
+            <p>
+              We could not send a confirmation email to the address you
+              provided.
+            </p>
+            {confirmation.emailError && (
+              <p className="mt-2 text-xs text-orange-700">
+                {confirmation.emailError}
+              </p>
+            )}
+          </div>
+        )}
+
         <Link
           href="/shop"
           className="mt-4 block text-sm text-accent hover:underline"
@@ -139,6 +158,20 @@ export function CheckoutForm() {
             id="name"
             name="name"
             required
+            className="mt-2 w-full border border-border bg-white px-4 py-3 text-sm outline-none focus:border-accent"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="email" className="text-xs tracking-widest text-muted uppercase">
+            Email Address
+          </label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            required
+            placeholder="you@example.com"
             className="mt-2 w-full border border-border bg-white px-4 py-3 text-sm outline-none focus:border-accent"
           />
         </div>

@@ -43,6 +43,7 @@ CREATE TABLE product_images (
 CREATE TABLE customers (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name TEXT NOT NULL,
+  email TEXT,
   phone TEXT NOT NULL,
   city TEXT,
   created_at TIMESTAMPTZ DEFAULT now(),
@@ -54,6 +55,7 @@ CREATE TABLE orders (
   order_number TEXT NOT NULL UNIQUE,
   customer_id UUID REFERENCES customers(id),
   customer_name TEXT NOT NULL,
+  customer_email TEXT,
   customer_phone TEXT NOT NULL,
   customer_address TEXT NOT NULL,
   customer_city TEXT NOT NULL,

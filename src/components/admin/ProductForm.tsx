@@ -184,7 +184,7 @@ export function ProductForm({ categories, product }: ProductFormProps) {
             type="file"
             accept="image/*"
             multiple
-            className="mt-2 w-full text-sm"
+            className="mt-2 w-full text-sm cursor-pointer"
           />
           <p className="mt-2 text-xs text-muted">Upload one or more images for the new product.</p>
         </div>

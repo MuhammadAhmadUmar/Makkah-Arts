@@ -46,6 +46,10 @@ export function OrdersTable({ orders }: OrdersTableProps) {
               {order.customer_name}
             </p>
             <p>
+              <span className="text-muted">Email: </span>
+              {order.customer_email ?? "—"}
+            </p>
+            <p>
               <span className="text-muted">Phone: </span>
               {order.customer_phone}
             </p>
